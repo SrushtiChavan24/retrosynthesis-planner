@@ -12,10 +12,15 @@ const MAX_SMILES_LENGTH = 300;
 
 interface RetrosynthesisResult {
   target: string;
+  smiles?: string;
   reaction_type?: string;
   reactants?: string;
   description?: string;
+  reaction_steps?: string[];
+  possible_matches?: { product: string; product_smiles: string; reactants: string; reaction_type: string }[];
+  pathway_diagram?: string;
   found: boolean;
+  fallback?: boolean;
 }
 
 export default function RetrosynthesisPage() {
@@ -55,12 +60,12 @@ export default function RetrosynthesisPage() {
         <CardHeader>
           <CardTitle>Target Molecule</CardTitle>
           <CardDescription>
-            Enter the SMILES string of the target molecule you want to synthesize.
+            Enter the SMILES string or common compound name of the target molecule you want to synthesize.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="smiles">Target SMILES</Label>
+            <Label htmlFor="smiles">Target SMILES or compound name</Label>
             <Input
               id="input"
               value={input}
@@ -73,7 +78,7 @@ export default function RetrosynthesisPage() {
                 setInput(val);
                 setError(null);
               }}
-              placeholder="e.g. CCOC(=O)C (ethyl acetate)"
+              placeholder="e.g. CCOC(=O)C (ethyl acetate) or benzene"
               className="font-mono"
               maxLength={MAX_SMILES_LENGTH + 10}
             />
@@ -118,6 +123,24 @@ export default function RetrosynthesisPage() {
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
+                    <Label className="text-sm font-medium">Target Name</Label>
+                    <div className="mt-1 p-3 bg-muted rounded-md">
+                      <span className="font-medium">{result.target}</span>
+                    </div>
+                  </div>
+
+                  {result.smiles && (
+                    <div>
+                      <Label className="text-sm font-medium">SMILES</Label>
+                      <div className="mt-1 p-3 bg-muted rounded-md font-mono text-sm">
+                        {result.smiles}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
                     <Label className="text-sm font-medium">Reaction Type</Label>
                     <div className="mt-1 p-3 bg-muted rounded-md">
                       <span className="font-medium">{result.reaction_type}</span>
@@ -140,16 +163,9 @@ export default function RetrosynthesisPage() {
                 </div>
 
                 <div className="border-t pt-4">
-                  <h3 className="font-medium mb-2">Reaction Pathway</h3>
-                  <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg font-mono text-sm">
-                    <div className="text-center mb-2">Target Molecule</div>
-                    <div className="text-center text-lg mb-2">↓</div>
-                    <div className="text-center text-lg mb-2">{result.reaction_type}</div>
-                    <div className="text-center text-lg mb-2">↓</div>
-                    <div className="text-center">Starting Materials</div>
-                    <div className="mt-4 p-2 bg-white dark:bg-gray-800 rounded border text-center">
-                      {result.reactants}
-                    </div>
+                  <h3 className="font-medium mb-2">Detailed Retrosynthesis Pathway Diagram</h3>
+                  <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg font-mono text-sm whitespace-pre-wrap overflow-x-auto">
+                    {result.pathway_diagram}
                   </div>
                 </div>
               </div>
@@ -163,7 +179,7 @@ export default function RetrosynthesisPage() {
                 <div className="text-sm text-muted-foreground">
                   <p>Try these example molecules that have known pathways:</p>
                   <div className="flex flex-wrap gap-2 mt-2 justify-center">
-                    {["CCOC(=O)C", "CCO", "CC=O"].map((example) => (
+                    {["benzene", "aspirin", "ibuprofen", "caffeine", "glucose", "ethanol", "acetone"].map((example) => (
                       <Button
                         key={example}
                         

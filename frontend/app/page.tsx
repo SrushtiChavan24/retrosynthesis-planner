@@ -6,7 +6,7 @@ export default function Home() {
           AI-Powered Chemistry Workstation
         </h1>
         <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-10">
-          SMILES conversion • Molecular analysis • Electrolysis calculator • Retrosynthesis planning • Safety checking • AI research assistant
+          SMILES conversion • Molecular analysis • Electrolysis calculator • Retrosynthesis planning 
         </p>
         <div className="flex flex-wrap justify-center gap-4">
           <a href="/converter">

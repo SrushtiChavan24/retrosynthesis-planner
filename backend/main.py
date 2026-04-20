@@ -1,8 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import chemistry_router
+from routers import chemistry_router, retrosynthesis_router
 # from routers import electrolysis_router
-# from routers import retrosynthesis_router
 
 app = FastAPI(
     title="AI Chemistry Backend - Phase 1",
@@ -21,7 +20,7 @@ app.add_middleware(
 
 app.include_router(chemistry_router.router)
 # app.include_router(electrolysis_router.router)
-# app.include_router(retrosynthesis_router.router)
+app.include_router(retrosynthesis_router.router)
 
 
 @app.get("/")
