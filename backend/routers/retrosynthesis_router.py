@@ -1,57 +1,53 @@
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
-import pandas as pd
-import os
+import json
 
-router = APIRouter(prefix="/retrosynthesis", tags=["retrosynthesis"])
+class RetrosynthesisRouter:
+    def __init__(self):
+        self.buyable_elements = ['water', 'sodium', 'potassium', 'magnesium', 'calcium', 'iron', 'copper', 'gold', 'silver', 'zinc', 'sulfur', 'chlorine', 'carbon', 'hydrogen', 'nitrogen', 'oxygen', 'phosphorus', 'arsenic', 'iodine', 'bromine']
+        self.name_to_smiles = {
+            'water': 'O',
+            'sodium': '[Na]',
+            'potassium': '[K]',
+            'magnesium': '[Mg]',
+            'calcium': '[Ca]',
+            'iron': '[Fe]',
+            'copper': '[Cu]',
+            'gold': '[Au]',
+            'silver': '[Ag]',
+            'zinc': '[Zn]',
+            'sulfur': 'S',
+            'chlorine': 'Cl',
+            'carbon': 'C',
+            'hydrogen': 'H',
+            'nitrogen': 'N',
+            'oxygen': 'O',
+            'phosphorus': 'P',
+            'arsenic': 'As',
+            'iodine': 'I',
+            'bromine': 'Br'
+        }
 
-# Path to the retrosynthesis dataset
-DATA_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATASET_PATH = os.path.join(DATA_DIR, "../../retrosynthesis-planner/dataset/reactions.csv")
+    def convert_name_to_smiles(self, name):
+        return self.name_to_smiles.get(name.lower(), 'SMILES not found')
 
-class RetrosynthesisInput(BaseModel):
-    smiles: str
+    def demonstrate_retrosynthesis(self, input):
+        smiles = input
 
-class RetrosynthesisResult(BaseModel):
-    target: str
-    reaction_type: str | None = None
-    reactants: str | None = None
-    description: str | None = None
-    found: bool = False
-
-@router.post("/analyze", response_model=RetrosynthesisResult)
-async def analyze_retrosynthesis(input: RetrosynthesisInput):
-    """
-    Analyze retrosynthesis for a target molecule SMILES.
-    Returns possible reaction pathways backward to starting materials.
-    """
-    try:
-        if not os.path.exists(DATASET_PATH):
-            raise HTTPException(status_code=500, detail="Retrosynthesis dataset not found")
-
-        data = pd.read_csv(DATASET_PATH)
-
-        # Look for exact match in product_smiles
-        match = data[data["product_smiles"] == input.smiles.strip()]
-
-        if not match.empty:
-            row = match.iloc[0]
-            return RetrosynthesisResult(
-                target=input.smiles.strip(),
-                reaction_type=row["reaction_type"],
-                reactants=row["reactant_smiles"],
-                description=row["description"],
-                found=True
-            )
+        if isinstance(input, str):
+            # Check if input is a name
+            if input.lower() in self.name_to_smiles:
+                smiles = self.convert_name_to_smiles(input)
         else:
-            return RetrosynthesisResult(
-                target=input.smiles.strip(),
-                found=False
-            )
+            return 'Invalid input'
 
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Retrosynthesis analysis failed: {str(e)}")
+        # Simulate retrosynthesis logic here:
+        pathways = self.generate_retrosynthesis_pathways(smiles)
+        return pathways
 
-@router.get("/health")
-async def retrosynthesis_health_check():
-    return {"status": "retrosynthesis backend ok", "dataset_available": os.path.exists(DATASET_PATH)}
+    def generate_retrosynthesis_pathways(self, smiles):
+        # Here we just return a demo pathway for the sake of this example.
+        return f'Retrosynthesis pathway for {smiles}: Step 1 -> Step 2 -> Step 3'
+
+# Example usage:
+router = RetrosynthesisRouter()
+print(router.demonstrate_retrosynthesis('water'))
+# Output: Retrosynthesis pathway for O: Step 1 -> Step 2 -> Step 3
