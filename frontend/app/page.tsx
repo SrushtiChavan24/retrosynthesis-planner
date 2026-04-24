@@ -22,14 +22,6 @@ export default function Home() {
           <h3 className="text-xl font-semibold mb-3">Core Tools</h3>
           <p className="text-muted-foreground">SMILES ↔ Structure, InChI, properties, MOL file export</p>
         </div>
-        <div className="border rounded-lg p-6 bg-card">
-          <h3 className="text-xl font-semibold mb-3">Planning & Safety</h3>
-          <p className="text-muted-foreground">AI retrosynthesis + reaction hazard analysis</p>
-        </div>
-        <div className="border rounded-lg p-6 bg-card">
-          <h3 className="text-xl font-semibold mb-3">Research & Trends</h3>
-          <p className="text-muted-foreground">AI assistant + chemistry trend insights</p>
-        </div>
       </section>
     </div>
   );
