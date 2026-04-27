@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers import chemistry_router, retrosynthesis_router
+from routers.retro_router import router as retro_router
+app.include_router(retro_router)
 # from routers import electrolysis_router
 
 app = FastAPI(
