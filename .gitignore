@@ -1,0 +1,2 @@
+# Ignore large data files
+backend/data/chembl_sample.sdf
