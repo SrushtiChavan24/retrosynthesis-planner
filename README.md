@@ -1,15 +1,5 @@
-# retrosynthesis-planner
---retrosynthesis--
-working:
-1. Input Molecule
-Provide the name of the chemical you wish to synthesize.
-
-2. AI Analysis
-The AI identifies disconnections and evaluates potential reactions.
-
-3. Review Routes
-Receive scored, step-by-step synthetic plans for your review.
-
+# Chem-Hack Helper 
+An web application for the new chem-interns or for the students intreseted in chemistry to give them proper knowledge about the subject they adore
 --Interactive Periodic Table--
 
 Browse and explore all 119 elements through three interactive views:
