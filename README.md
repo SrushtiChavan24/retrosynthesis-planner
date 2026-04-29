@@ -28,12 +28,8 @@ Statistics panel displays count and average values for all periodic properties. 
 **4. Retro Synthesis **
 Run the backend
 
-##### 2) Create a conda environment
-    
-    conda env create -f environment.yml
-    conda activate retro_star_env
 
-#### 2. Download the data
+#### Download the data
 
 ##### 1) Download the building block molecules, pretrained models, and (optional) test data 
 
